@@ -5,7 +5,7 @@ const isOwner = require('../middleware/is-owner.js');
 
 router.get('/:userId', isOwner, async (req, res) => {
   try {
-    if (req.user._id !== req.params.userId) {
+    if (req.user.id !== req.params.userId) {
         return res.status(401).json({ error: "Unauthorized"});
     };
     const user = await User.findById(req.params.userId);

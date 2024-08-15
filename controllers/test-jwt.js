@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const mock_user = {
-    _id: 1,
+    id: 1,
     username: 'test',
     password: 'test'
 };

@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
             username,
             hashedPassword
         });
-        const token = jwt.sign({ username: user.username, _id: user._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_SECRET);
         return res.status(201).json({ user, token });
     } catch (error) {
         res.status(400).json({ error: 'Something went wrong! Try again.' });
@@ -28,7 +28,7 @@ router.post('/signin', async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ username });
         if (user && bcrypt.compareSync(password, user.hashedPassword)) {
-            const token = jwt.sign({ username: user.username, _id: user._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_SECRET);
             res.status(200).json({ token });
         } else {
             res.status(401).json({ error: 'Something went wrong! Try again.' });
