@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const hoots = await Hoot.find({}).populate('author').sort({ createdAt: 'desc'});
+        const hoots = await Hoot.find({}).populate('author').populate('comments.author').sort({ createdAt: 'desc'});
         if(!hoots) return res.status(404).json({error: "Not Found"});
         res.status(200).json(hoots);
     } catch (error) {
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:hootId', async (req, res) => {
     try {
-        const hoot = await Hoot.findById(req.params.hootId).populate('author');
+        const hoot = await Hoot.findById(req.params.hootId).populate('author').populate('comments.author');
         if(!hoot) return res.status(404).json({error: "Not Found"});
         res.status(200).json(hoot);
     } catch (error) {
@@ -104,7 +104,7 @@ router.delete('/:hootId/comments/:commentId', async (req, res) => {
     try {
         const hoot = await Hoot.findById(req.params.hootId);
         if(!hoot) return res.status(404).json({error: "Not Found"});
-        hoot.comments.remove({ id: req.params.commentId });
+        hoot.comments.remove({ _id: req.params.commentId });
         await hoot.save();
         res.status(200).json(hoot.comments);
     } catch (error) {
